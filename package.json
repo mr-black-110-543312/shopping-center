@@ -1,0 +1,32 @@
+{
+  "name": "shopping-center",
+  "version": "1.0.0",
+  "description": "A complete e-commerce website with admin panel",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server .",
+    "build": "echo 'No build process needed for static site'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "ecommerce",
+    "shopping",
+    "html",
+    "css",
+    "javascript",
+    "admin-panel",
+    "responsive"
+  ],
+  "author": "Shopping Center Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/shopping-center.git"
+  },
+  "homepage": "https://shopping-center.vercel.app",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "serve": "^14.2.1"
+  }
+}
