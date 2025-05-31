@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_1280.png" type="image/png" />
+
+<title>Page Is Under Construction</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+  /* Background grid with connecting nodes - tech style */
+  body, html {
+    margin: 0; padding: 0;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: #0a0f2e;
+    overflow: hidden;
+    color: #e0e6f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Canvas full screen for animated network */
+  #networkCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 10;
+    background: rgba(10, 15, 46, 0.85);
+    padding: 40px 50px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #66fcf1;
+    text-shadow: 0 0 10px #66fcf1;
+  }
+
+  p {
+    margin-bottom: 30px;
+    font-size: 1.15rem;
+    color: #a9b8d3;
+  }
+
+  input[type="email"] {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 50px;
+    border: none;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: inset 0 0 8px #22ffffaa;
+    background: #14233c;
+    color: #e0e6f7;
+    transition: box-shadow 0.3s ease;
+  }
+
+  input[type="email"]:focus {
+    box-shadow: 0 0 15px #66fcf1;
+    background: #0d1524;
+  }
+
+  button {
+    margin-top: 20px;
+    background: #66fcf1;
+    color: #0a0f2e;
+    border: none;
+    padding: 15px 40px;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 15px #66fcf1;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  button:hover {
+    background: #52c7ca;
+    transform: scale(1.05);
+  }
+
+  #statusMsg {
+    margin-top: 18px;
+    font-size: 1rem;
+    min-height: 24px;
+  }
+
+  /* Fade in animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .container {
+    animation: fadeInUp 1.2s ease forwards;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="networkCanvas"></canvas>
+
+<div class="container">
+  <h1>🚀 Coming Soon..</h1>
+  <p>Stay updated with the latest tech launch. Enter your email:</p>
+  <form onsubmit="submitForm(event)" id="emailForm">
+    <input type="email" name="email" id="emailInput" placeholder="Your email address" required />
+    <button type="submit">Notify Me</button>
+  </form>
+  <p id="statusMsg"></p>
+</div>
+
+<script>
+  // Canvas network animation (simple connected dots)
+  const canvas = document.getElementById('networkCanvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let nodes = [];
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Node {
+    constructor() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.radius = 2;
+    }
+    move() {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      if(this.x < 0 || this.x > width) this.vx = -this.vx;
+      if(this.y < 0 || this.y > height) this.vy = -this.vy;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(102,252,241,0.8)';
+      ctx.fill();
+    }
+  }
+
+  function distance(n1, n2) {
+    return Math.sqrt((n1.x - n2.x)**2 + (n1.y - n2.y)**2);
+  }
+
+  function connect(n1, n2) {
+    const dist = distance(n1, n2);
+    if(dist < 120) {
+      ctx.strokeStyle = 'rgba(102,252,241,' + (1 - dist/120) + ')';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(n1.x, n1.y);
+      ctx.lineTo(n2.x, n2.y);
+      ctx.stroke();
+    }
+  }
+
+  for(let i=0; i<50; i++) {
+    nodes.push(new Node());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    nodes.forEach(n => {
+      n.move();
+      n.draw();
+    });
+
+    for(let i=0; i<nodes.length; i++) {
+      for(let j=i+1; j<nodes.length; j++) {
+        connect(nodes[i], nodes[j]);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // Form submit JS (same as before)
+  function submitForm(e) {
+    e.preventDefault();
+    const email = document.getElementById("emailInput").value;
+    const formData = new FormData();
+    formData.append("email", email);
+
+    fetch("https://script.google.com/macros/s/AKfycby1uP2SWnKxZazildNn7aSoCkMku923BcEarmsie1jiDmbIMQWJ4LBLSyNsMtPPANfqBg/exec", {
+      method: "POST",
+      body: formData,
+    })
+    .then(response => response.text())
+    .then(text => {
+      document.getElementById("statusMsg").textContent = "✅ Email saved successfully!";
+      document.getElementById("emailForm").reset();
+    })
+    .catch(() => {
+      document.getElementById("statusMsg").textContent = "❌ Failed to submit!";
+    });
+  }
+</script>
+
+</body>
+</html>
