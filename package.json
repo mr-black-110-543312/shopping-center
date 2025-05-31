@@ -30,3 +30,8 @@
     "serve": "^14.2.1"
   }
 }
+{
+  "scripts": {
+    "build": "[my-framework] build --output public"
+  }
+}
